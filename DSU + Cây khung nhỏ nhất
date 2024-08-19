@@ -1,0 +1,73 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+long long n,m,kq,mst;
+long long parent[1000007],siz[1000007];
+long long d[1000007];
+struct canh
+{
+    int u,v,w;
+};
+canh g[1000007];
+bool cmp(canh x, canh y)
+{
+    return x.w<y.w;
+}
+
+
+void make_set(long long n)
+{
+    for(int i=1; i<=n; i++)
+    {
+        parent[i]=i;
+        siz[i]=1;
+    }
+}
+
+
+long long fin(long long v)
+{
+    if(parent[v]==v) return v;
+    return parent[v]=fin(parent[v]);
+}
+
+
+void unio(long long a, long long b)
+{
+    a=fin(a);
+    b=fin(b);
+    if(a!=b)
+    {
+        if(siz[a]>siz[b]) swap(a,b);
+        parent[b]=a;
+        siz[a]+=siz[b];
+    }
+}
+
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    //freopen("temp.inp","r",stdin);
+    //freopen("temp.out","w",stdout);
+    cin>>n>>m;
+    make_set(1000000);
+    for(int i=1; i<=m; i++) cin>>g[i].u>>g[i].v>>g[i].w;
+    sort(g+1,g+1+m,cmp);
+    int i=0;
+    while(mst<n-1 && m!=0)
+    {
+        i++;
+        long l,r;
+        l=fin(g[i].u);
+        r=fin(g[i].v);
+        if(l==r) continue;
+        unio(g[i].u,g[i].v);
+        mst++;
+        kq+=g[i].w;
+        m--;
+    }
+    cout<<kq;
+    return 0;
+}
