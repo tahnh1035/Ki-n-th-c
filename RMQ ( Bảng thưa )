@@ -1,0 +1,33 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+long long n,q,a[1000007],f[1000007][20];
+long long calc(int i,int j)
+{
+    int k=log2(j-i+1);
+    return min(f[i][k],f[j-(1<<k)+1][k]);
+}
+main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    //freopen("heehee.inp","r",stdin);
+    //freopen("heehee.out","w",stdout);
+    cin>>n>>q;
+    for(int i=1; i<=n; i++)
+    {
+        cin>>a[i];
+        f[i][0]=a[i];
+    }
+    int mk=log2(n)+1;
+    for(int k=1; k<=mk; k++)
+        for(int i=1; i+(1<<k)-1<=n; i++)
+            f[i][k]=min(f[i][k-1],f[i+(1<<(k-1))][k-1]);
+    while(q--)
+    {
+        int u,v;
+        cin>>u>>v;
+        cout<<calc(u,v)<<endl;
+    }
+    return 0;
+}
