@@ -1,0 +1,62 @@
+#include <bits/stdc++.h>
+#define bit(x, i) ((x >> i) & 1)
+#define int long long
+#define fi first
+#define se second
+
+using namespace std;
+void freopen()
+{
+#ifndef ONLINE_JUDGE
+    freopen("lta.inp", "r", stdin);
+    freopen("lta.out", "w", stdout);
+#endif // ONLINE_JUDGE
+}
+const int N = 1000007;
+const int mod = 1e9 + 7;
+int n, m, k, q, ans, t, mx, l, r, p;
+int f[N];
+
+void gpt1(int a, int b, int &xo, int &yo)
+{
+    if(b==0)
+    {
+        xo=1;
+        yo=0;
+        return;
+    }
+    int x1,y1;
+    gpt1(b,a%b,x1,y1);
+    xo=y1;
+    yo=x1-a/b*y1;
+}
+
+bool GPT(int a, int b, int c, int &xo, int &yo)
+{
+    int d=__gcd(a,b);
+    if(c%d!=0) return false;
+    a/=d;
+    b/=d;
+    c/=d;
+    gpt1(a,b,xo,yo);
+    xo=xo*c;
+    yo=yo*c;
+    return true;
+}
+
+signed main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    freopen();
+    cin>>t;
+    while(t--)
+    {
+        int a,b,c,xo,yo;
+        cin>>a>>b>>c;
+        bool ok=GPT(a,b,c,xo,yo);
+        if(ok) cout<<xo<<' '<<yo<<'\n';
+        else cout<<0<<'\n';
+    }
+    return 0;
+}
