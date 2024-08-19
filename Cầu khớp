@@ -1,0 +1,49 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+long long n,m;
+vector<long long> g[1000007];
+long long cnt,bridge,cntjoint;
+long long low[1000007],id[1000007];
+bool joint[1000007];
+
+void dfs(long long u, long long pre)
+{
+    long long child=(u!=pre);
+    low[u]=id[u]=++cnt;
+    for(auto v:g[u])
+    {
+        if(v==pre) continue;
+        if(!id[v])
+        {
+            dfs(v,u);
+            low[u]=min(low[u],low[v]);
+            if(low[v]==id[v]) bridge++;
+            if(low[v]>=id[v]) child++;
+        }
+        else low[u]=min(low[u],id[v]);
+    }
+    if(child>1) joint[u]=true;
+}
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    //freopen("as.inp","r",stdin);
+    //freopen("as.out","w",stdout);
+    cin>>n>>m;
+    for(int i=1; i<=m; i++)
+    {
+        long u,v;
+        cin>>u>>v;
+        g[u].push_back(v);
+        g[v].push_back(u);
+    }
+    for(int i=1; i<=n; i++)
+    if(!id[i])
+        dfs(i,i);
+    for(int i=1; i<=n; i++)
+        if(joint[i]) cntjoint++;
+    cout<<bridge;
+    return 0;
+}
