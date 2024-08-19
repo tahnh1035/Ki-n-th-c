@@ -1,0 +1,68 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+const long long mod=1e9+7;
+long long n,m,kq,k;
+long long cnt,scc;
+long long a[1000007],b[1000007];
+long long low[1000007],num[1000007];
+bool id[1000007];
+vector<long long> g[1000007];
+stack<long long> st;
+
+void inp()
+{
+    cin>>n>>m;
+    //for(int i=1; i<=n; i++) cin>>b[i];
+    for(int i=1; i<=m; i++)
+    {
+        long u,v;
+        cin>>u>>v;
+        g[u].push_back(v);
+        //g[v].push_back(u);
+    }
+}
+
+void dfs(long long u)
+{
+    low[u]=num[u]=++cnt;
+    st.push(u);
+    for(auto v:g[u])
+    {
+        if(id[v]) continue;
+        if(!num[v])
+        {
+            dfs(v);
+            low[u]=min(low[u],low[v]);
+        }
+        else low[u]=min(low[u],num[v]);
+    }
+    if(low[u]==num[u])
+    {
+        scc++;
+        int v,dem=0;
+        do
+        {
+            v=st.top();
+            dem++;
+            st.pop();
+            id[v]=true;
+        }
+        while(v!=u);
+        a[++k]=dem;
+    }
+}
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    //freopen("as.inp","r",stdin);
+    //freopen("as.out","w",stdout);
+    inp();
+    for(int i=1; i<=n; i++)
+        if(!num[i]) dfs(i);
+    cout<<scc<<'\n';
+    sort(a+1,a+1+k);
+    for(int i=1; i<=k; i++) cout<<a[i]<<'\n';
+    return 0;
+}
